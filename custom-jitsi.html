@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jitsi Meet</title>
+    <script src="https://meet.jit.si/external_api.js"></script>
+</head>
+<body style="margin:0; padding:0; background:#000;">
+    <div id="meet" style="width:100vw; height:100vh;"></div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomName = urlParams.get('room');
+
+        const domain = "meet.jit.si";
+        const options = {
+            roomName: roomName,
+            parentNode: document.getElementById("meet"),
+            interfaceConfigOverwrite: {
+                TOOLBAR_BUTTONS: ["microphone", "camera"], 
+            }
+        };
+
+        const api = new JitsiMeetExternalAPI(domain, options);
+    </script>
+</body>
+</html>
