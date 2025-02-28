@@ -11,14 +11,27 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const roomName = urlParams.get('room');
+        const roomName = urlParams.get('room') || "default-room";  // Prevent empty room names
 
         const domain = "meet.jit.si";
         const options = {
             roomName: roomName,
             parentNode: document.getElementById("meet"),
             interfaceConfigOverwrite: {
-                TOOLBAR_BUTTONS: ["microphone", "camera"], 
+                TOOLBAR_BUTTONS: [
+                    "microphone", 
+                    "camera", 
+                    "fullscreen", 
+                    "tileview"
+                ], // Removed chat, end call, screen sharing, etc.
+                SHOW_JITSI_WATERMARK: false, 
+                SHOW_WATERMARK_FOR_GUESTS: false,
+                DEFAULT_BACKGROUND: "#000",
+            },
+            configOverwrite: {
+                disableThirdPartyRequests: true,
+                disableInviteFunctions: true,  // Disables "Add People" option
+                disableRemoteMute: true,
             }
         };
 
