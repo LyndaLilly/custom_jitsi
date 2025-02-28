@@ -7,34 +7,35 @@
     <script src="https://meet.jit.si/external_api.js"></script>
 </head>
 <body style="margin:0; padding:0; background:#000;">
-    <div id="meet" style="width:100vw; height:100vh; color: white">hello</div>
+    <div id="meet" style="width:100vw; height:100vh;"></div>
 
     <script>
+        // Get room name from URL (example: ?room=badanix-433865)
         const urlParams = new URLSearchParams(window.location.search);
-        const roomName = urlParams.get('room');
+        const roomName = urlParams.get('room') || "default-room";
 
-        if (roomName) {
-            const domain = "meet.jit.si";
-            const options = {
-                roomName: roomName,
-                parentNode: document.getElementById("meet"),
-                configOverwrite: {
-                    disableDeepLinking: true,  // ✅ Prevents "Join in Browser or App"
-                    disableThirdPartyRequests: true,
-                },
-                interfaceConfigOverwrite: {
-                    TOOLBAR_BUTTONS: [
-                        "microphone", "camera", "fullscreen", "tileview"
-                    ],
-                    SHOW_JITSI_WATERMARK: false,
-                    SHOW_WATERMARK_FOR_GUESTS: false,
-                }
-            };
+        const domain = "meet.jit.si";
+        const options = {
+            roomName: roomName,
+            parentNode: document.getElementById("meet"),
+            interfaceConfigOverwrite: {
+                TOOLBAR_BUTTONS: [
+                    "microphone", 
+                    "camera", 
+                    "fullscreen", 
+                    "tileview"
+                ], // Removed unwanted buttons
+                SHOW_JITSI_WATERMARK: false, 
+                SHOW_WATERMARK_FOR_GUESTS: false,
+            },
+            configOverwrite: {
+                disableThirdPartyRequests: true,
+                disableInviteFunctions: true, // Disables "Add People" option
+                disableRemoteMute: true,
+            }
+        };
 
-            const api = new JitsiMeetExternalAPI(domain, options);
-        } else {
-            document.body.innerHTML = "<h2 style='color:white; text-align:center;'>No room provided!</h2>";
-        }
+        const api = new JitsiMeetExternalAPI(domain, options);
     </script>
 </body>
 </html>
