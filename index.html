@@ -4,45 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jitsi Meet</title>
+
+    <!-- ✅ Fix CORS Issues -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Access-Control-Allow-Methods" content="GET, POST, OPTIONS" />
+    <meta http-equiv="Access-Control-Allow-Headers" content="Content-Type" />
+
+    <!-- ✅ Ensure Jitsi API loads properly -->
     <script src="https://meet.jit.si/external_api.js"></script>
 </head>
 <body style="margin:0; padding:0; background:#000;">
     <div id="meet" style="width:100vw; height:100vh;"></div>
 
     <script>
-        // Get room name from URL (example: ?room=badanix-433865)
-        const urlParams = new URLSearchParams(window.location.search);
-        const roomName = urlParams.get('room') || "default-room";
+        document.addEventListener("DOMContentLoaded", function () {
+            // ✅ Get room name from URL (example: ?room=badanix-433865)
+            const urlParams = new URLSearchParams(window.location.search);
+            let roomName = urlParams.get('room');
 
-        const domain = "meet.jit.si";
-        const options = {
-            roomName: roomName,
-            parentNode: document.getElementById("meet"),
-            userInfo: {
-                displayName: "Guest User" // Default name (optional)
-            },
-            interfaceConfigOverwrite: {
-                TOOLBAR_BUTTONS: [
-                    "microphone", 
-                    "camera", 
-                    "fullscreen", 
-                    "tileview"
-                ], // Remove unwanted buttons
-                SHOW_JITSI_WATERMARK: false,
-                SHOW_WATERMARK_FOR_GUESTS: false,
-                MOBILE_APP_PROMO: false, // Prevents the mobile app prompt
-            },
-            configOverwrite: {
-                prejoinPageEnabled: false,  // ✅ **Bypass the "Join Meeting" screen**
-                disableThirdPartyRequests: true,
-                disableInviteFunctions: true, // Disables "Add People"
-                startWithAudioMuted: false, // Auto-start with audio
-                startWithVideoMuted: false, // Auto-start with video
-                enableWelcomePage: false,  // Removes welcome page
+            // ✅ Ensure room name is valid (fallback to default)
+            if (!roomName || roomName.trim() === "") {
+                roomName = "default-room";
             }
-        };
 
-        const api = new JitsiMeetExternalAPI(domain, options);
+            console.log("Jitsi Room:", roomName); // Debugging
+
+            // ✅ Ensure Jitsi API is loaded
+            if (typeof JitsiMeetExternalAPI !== "undefined") {
+                const domain = "meet.jit.si";
+                const options = {
+                    roomName: roomName,
+                    parentNode: document.getElementById("meet"),
+                    userInfo: {
+                        displayName: "Guest User" // Default user name
+                    },
+                    interfaceConfigOverwrite: {
+                        TOOLBAR_BUTTONS: [
+                            "microphone", 
+                            "camera", 
+                            "fullscreen", 
+                            "tileview"
+                        ], // ✅ Only keep needed buttons
+                        SHOW_JITSI_WATERMARK: false,
+                        SHOW_WATERMARK_FOR_GUESTS: false,
+                        MOBILE_APP_PROMO: false, // ✅ Remove "Open in App" prompt
+                    },
+                    configOverwrite: {
+                        prejoinPageEnabled: false, // ✅ **Bypass "Join Meeting" screen**
+                        disableThirdPartyRequests: true,
+                        disableInviteFunctions: true, // ✅ Disable "Add People"
+                        startWithAudioMuted: false, // ✅ Auto-start with audio
+                        startWithVideoMuted: false, // ✅ Auto-start with video
+                        enableWelcomePage: false,  // ✅ Removes welcome page
+                    }
+                };
+
+                try {
+                    const api = new JitsiMeetExternalAPI(domain, options);
+                    console.log("✅ Jitsi Meeting Started Successfully!");
+                } catch (error) {
+                    console.error("❌ Jitsi API Error:", error);
+                    alert("Failed to start Jitsi meeting. Please check your internet connection.");
+                }
+            } else {
+                console.error("❌ Jitsi API failed to load.");
+                alert("Jitsi API failed to load. Refresh and try again.");
+            }
+        });
     </script>
 </body>
 </html>
