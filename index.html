@@ -18,20 +18,27 @@
         const options = {
             roomName: roomName,
             parentNode: document.getElementById("meet"),
+            userInfo: {
+                displayName: "Guest User" // Default name (optional)
+            },
             interfaceConfigOverwrite: {
                 TOOLBAR_BUTTONS: [
                     "microphone", 
                     "camera", 
                     "fullscreen", 
                     "tileview"
-                ], // Removed unwanted buttons
-                SHOW_JITSI_WATERMARK: false, 
+                ], // Remove unwanted buttons
+                SHOW_JITSI_WATERMARK: false,
                 SHOW_WATERMARK_FOR_GUESTS: false,
+                MOBILE_APP_PROMO: false, // Prevents the mobile app prompt
             },
             configOverwrite: {
+                prejoinPageEnabled: false,  // ✅ **Bypass the "Join Meeting" screen**
                 disableThirdPartyRequests: true,
-                disableInviteFunctions: true, // Disables "Add People" option
-                disableRemoteMute: true,
+                disableInviteFunctions: true, // Disables "Add People"
+                startWithAudioMuted: false, // Auto-start with audio
+                startWithVideoMuted: false, // Auto-start with video
+                enableWelcomePage: false,  // Removes welcome page
             }
         };
 
