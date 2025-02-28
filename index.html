@@ -7,7 +7,7 @@
     <script src="https://meet.jit.si/external_api.js"></script>
 </head>
 <body style="margin:0; padding:0; background:#000;">
-    <div id="meet" style="width:100vw; height:100vh;"></div>
+    <div id="meet" style="width:100vw; height:100vh;">hello</div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -18,20 +18,16 @@
             const options = {
                 roomName: roomName,
                 parentNode: document.getElementById("meet"),
+                configOverwrite: {
+                    disableDeepLinking: true,  // ✅ Prevents "Join in Browser or App"
+                    disableThirdPartyRequests: true,
+                },
                 interfaceConfigOverwrite: {
                     TOOLBAR_BUTTONS: [
-                        "microphone", 
-                        "camera", 
-                        "fullscreen", 
-                        "tileview"
-                    ], // ✅ Removes chat, end call, invite, etc.
-                    SHOW_JITSI_WATERMARK: false, 
+                        "microphone", "camera", "fullscreen", "tileview"
+                    ],
+                    SHOW_JITSI_WATERMARK: false,
                     SHOW_WATERMARK_FOR_GUESTS: false,
-                },
-                configOverwrite: {
-                    disableThirdPartyRequests: true,
-                    disableInviteFunctions: true,  // ✅ Disables "Add People"
-                    disableRemoteMute: true,
                 }
             };
 
